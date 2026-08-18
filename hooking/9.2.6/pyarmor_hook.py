@@ -305,15 +305,8 @@ class PyArmorRecoverer:
         for f in vars(self.mod).values():
             if not isinstance(f, types.FunctionType):
                 continue
-            co = f.__code__
-            n_pos = max(0, co.co_argcount - len(f.__defaults__ or ()))
-            # co_kwonlyargnames doesn't exist in 3.13+; slice it out of co_varnames instead
-            kw = {}
-            for name in co.co_varnames[co.co_argcount : co.co_argcount + co.co_kwonlyargcount]:
-                if name not in (f.__kwdefaults__ or {}):
-                    kw[name] = "CTF_SOLVED"
             try:
-                f(*(["CTF_SOLVED"] * n_pos), **kw)
+                f()
             except Exception as e:
                 self._log(f"    [*] call {f.__name__} failed (non-fatal): {type(e).__name__}: {e}")
 
