@@ -2,12 +2,15 @@
 
 Reverse-engineering notes and tooling for PyArmor.
 
+> AI-assisted: Documentation was written with AI support
+
 Scope:
 
 - runtime behavior of the native PyArmor runtime;
 - the protected blob format;
 - key derivation and decryption;
 - reconstruction of Python code objects;
+- obfuscation engine recovery and replica generation;
 - runtime capture used to validate static reconstruction.
 
 In-depth research currently targets PyArmor 9.2.6. Findings are version-scoped unless another version has been tested explicitly.
@@ -28,6 +31,14 @@ Pipeline: parse the embedded blob, derive the runtime key from data in `pyarmor_
 
 Covers code that does not run during a capture, at the cost of depending on the inferred format. Runtime captures detect reconstruction errors.
 
+## Replica
+
+[`replica/`](replica/) produces PyArmor-compatible distributions from pure Python. A full obfuscation engine replica.
+
+Unlike static reconstruction (which reads blobs), the replica writes blobs that the real `pyarmor_runtime_000000` executes. It drives the recovered maker source with Python-only natives, generates fresh RSA runtime keys, and produces self-contained dists.
+
+See [`replica/9.2.6/HOW_IT_WORKS.md`](replica/9.2.6/HOW_IT_WORKS.md) for the technical explanation.
+
 ## Version scope
 
 PyArmor's internal format is not a documented compatibility interface. Key-derivation inputs, blob layout, native runtime functions, and per-function encoding can change between releases.
@@ -42,9 +53,20 @@ pyarmor-research/
 │       ├── README.md
 │       └── pyarmor_hook.py
 │
-└── static/
+├── static/
+│   ├── README.md
+│   └── 9.2.6/
+│       ├── README.md
+│       ├── HOW_IT_WORKS.md
+│       └── pyarmor_static.py
+│
+└── replica/
     ├── README.md
     └── 9.2.6/
         ├── README.md
-        └── pyarmor_static.py
+        ├── HOW_IT_WORKS.md
+        ├── CORE_DATA_HOW_IT_WORKS.md
+        ├── core_data_1_cleaned.py
+        ├── core_data_1_plaintext.py
+        └── pyarmor_replica.py
 ```
