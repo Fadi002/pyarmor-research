@@ -39,6 +39,14 @@ Unlike static reconstruction (which reads blobs), the replica writes blobs that 
 
 See [`replica/9.2.6/HOW_IT_WORKS.md`](replica/9.2.6/HOW_IT_WORKS.md) for the technical explanation.
 
+## openprotect
+
+[`openprotect/`](openprotect/) is a small attempt at building PyArmor-style protection from scratch, as an open-source tool instead of research notes.
+
+It covers the other direction from the replica: rather than reproducing PyArmor's exact output, it implements the same class of protection independently - AST obfuscation, AES-GCM containers with enforced integrity checks, per-function encrypted bodies, string-table encryption, identifier renaming, RSA-PSS signed licenses, whole-module native compilation via Cython, and an exact deobfuscation round-trip for your own builds.
+
+Pure Python, zero dependencies, tested on CPython 3.10 through 3.14. A comparison table against PyArmor 9.2.6 and full CLI documentation live in [`openprotect/README.md`](openprotect/README.md).
+
 ## Version scope
 
 PyArmor's internal format is not a documented compatibility interface. Key-derivation inputs, blob layout, native runtime functions, and per-function encoding can change between releases.
@@ -69,4 +77,10 @@ pyarmor-research/
         ├── core_data_1_cleaned.py
         ├── core_data_1_plaintext.py
         └── pyarmor_replica.py
+
+openprotect/
+├── README.md
+├── pyproject.toml
+├── src/openprotect/
+└── tests/
 ```
